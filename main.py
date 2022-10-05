@@ -9,11 +9,14 @@ color_background = (100, 100, 100)
 color_player1 = (255, 0, 0)
 color_player2 = (0, 0, 255)
 color_ball = (255, 255, 0)
+color_line = (255, 255, 255)
 
 # Sizes
 player_width = 15
 player_height = 60
 ball_radius = 10
+line_width = 2
+line_height = 590
 
 # Coords
 player1_x = 50
@@ -22,6 +25,8 @@ player2_x = 725
 player2_y = 300
 ball_x = 400
 ball_y = 325
+line_x = 400
+line_y = 5
 
 # Window Size
 screen_width = 800
@@ -58,6 +63,9 @@ while running:
     
     # Draw the Ball
     ball = pygame.draw.circle(screen, color_ball, (ball_x, ball_y), ball_radius)
+
+    # Draw the Line
+    line = pygame.draw.rect(screen, color_line, (line_x, line_y, line_width, line_height))
 
     # Refresh the window
     pygame.display.flip()
