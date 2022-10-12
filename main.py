@@ -74,17 +74,11 @@ while running:
         if event.type == pygame.KEYUP:
             
             # Player 1
-            if event.key == pygame.K_w:
-                player1_vspeed = 0
-
-            if event.key == pygame.K_s:
+            if event.key == pygame.K_w or event.key == pygame.K_s:
                 player1_vspeed = 0
 
             # Player 2
-            if event.key == pygame.K_UP:
-                player2_vspeed = 0
-
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_UP or event.key == pygame.K_DOWN:
                 player2_vspeed = 0
 
     if player1_y + player1_vspeed >= 0 and player1_y + player1_vspeed + player_height <= screen_height:
@@ -94,6 +88,7 @@ while running:
 
     ball_x += ball_hspeed
     ball_y += ball_vspeed
+
     if ball_x <= 0 or ball_x + ball_radius >= screen_width: 
         ball_hspeed *= -1
         ball_x = 400
@@ -101,11 +96,10 @@ while running:
     
     if ball_x <= player1_x + player_width and ball_y >= player1_y and ball_y <= player1_y + player_height:
         ball_hspeed *= -1
-
     if ball_x + ball_radius >= player2_x and ball_y >= player2_y and ball_y <= player2_y + player_height:
         ball_hspeed *= -1
-
-    if ball_y <= 0 or ball_y + ball_radius >= screen_height: ball_vspeed *= -1
+    if ball_y <= 0 or ball_y + ball_radius >= screen_height:
+        ball_vspeed *= -1
 
     # Fill the screen with color
     screen.fill(color_background)
