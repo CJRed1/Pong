@@ -1,5 +1,6 @@
-# Import Pygame
+# Import
 import pygame
+import random as rd
 
 # Initialize Pygame
 pygame.init()
@@ -19,8 +20,8 @@ ball_radius = 10
 # Speeds
 player1_vspeed = 0
 player2_vspeed = 0
-ball_hspeed = 0.25
-ball_vspeed = 0.25
+ball_hspeed = rd.choice([-0.25, 0.25])
+ball_vspeed = rd.choice([-0.25, 0.25])
 
 # Coords
 player1_x = 50
@@ -29,6 +30,8 @@ player2_x = 725
 player2_y = 300
 ball_x = 400
 ball_y = 325
+
+player1_sprite = pygame.image.load("sprites/spr_funnyguy.png")
 
 # Window Size
 screen_width = 800
@@ -90,14 +93,16 @@ while running:
     ball_y += ball_vspeed
 
     if ball_x <= 0 or ball_x + ball_radius >= screen_width: 
-        ball_hspeed *= -1
+        ball_hspeed = rd.choice([-0.25, 0.25])
         ball_x = 400
         ball_y = 325
     
-    if ball_x <= player1_x + player_width and ball_y >= player1_y and ball_y <= player1_y + player_height:
+    if ball_x + ball_radius >= player1_x and ball_x <= player1_x + player_width and ball_y >= player1_y and ball_y <= player1_y + player_height:
         ball_hspeed *= -1
-    if ball_x + ball_radius >= player2_x and ball_y >= player2_y and ball_y <= player2_y + player_height:
+        ball_x += 1
+    if ball_x + ball_radius >= player2_x and ball_x <= player2_x + player_width and ball_y >= player2_y and ball_y <= player2_y + player_height:
         ball_hspeed *= -1
+        ball_x -= 1
     if ball_y <= 0 or ball_y + ball_radius >= screen_height:
         ball_vspeed *= -1
 
@@ -112,9 +117,12 @@ while running:
     
     # Draw the Line
     line = pygame.draw.aaline(screen, color_line, (screen_width/2, 2), (screen_width/2, screen_height-4))
+    line_middle = pygame.draw.circle(screen, color_line, (screen_width/2, screen_height/2+30), 90, 1)
 
     # Draw the Ball
     ball = pygame.draw.circle(screen, color_ball, (ball_x, ball_y), ball_radius)
+
+    
 
     # Refresh the window
     pygame.display.flip()
