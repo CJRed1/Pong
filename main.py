@@ -20,8 +20,9 @@ ball_radius = 10
 # Speeds
 player1_vspeed = 0
 player2_vspeed = 0
-ball_hspeed = rd.choice([-0.25, 0.25])
-ball_vspeed = rd.choice([-0.25, 0.25])
+ball_speed = 0.2
+ball_hspeed = rd.choice([-ball_speed, ball_speed])
+ball_vspeed = rd.choice([-ball_speed, ball_speed])
 
 # Coords
 player1_x = 50
@@ -30,8 +31,6 @@ player2_x = 725
 player2_y = 300
 ball_x = 400
 ball_y = 325
-
-player1_sprite = pygame.image.load("sprites/spr_funnyguy.png")
 
 # Window Size
 screen_width = 800
@@ -49,6 +48,25 @@ pygame.display.set_caption("Pong Game")
 # Icon
 icon = pygame.image.load("pong_icon.png")
 pygame.display.set_icon(icon)
+
+# Score Variables
+player1_score = 0
+player2_score = 0
+
+# Score Font
+score_font = pygame.font.Font("PixelEmulator-xq08.ttf", 32)
+
+# Score Position
+p1score_x = 10
+p2score_x = 410
+score_y = 10
+
+# Show Score
+def show_score(x, x2, y):
+    score1 = score_font.render("P1: " + str(player1_score), True, color_line)
+    score2 = score_font.render("P2: " + str(player2_score), True, color_line)
+    screen.blit(score1, (x, y))
+    screen.blit(score2, (x2, y))
 
 # Game Loop
 running = True
@@ -92,17 +110,18 @@ while running:
     ball_x += ball_hspeed
     ball_y += ball_vspeed
 
-    if ball_x <= 0 or ball_x + ball_radius >= screen_width: 
-        ball_hspeed = rd.choice([-0.25, 0.25])
+    if ball_x <= 0:
+        ball_hspeed = rd.choice([-ball_speed, ball_speed])
+        player2_score += 1
         ball_x = 400
         ball_y = 325
-    
-    if ball_x + ball_radius >= player1_x and ball_x <= player1_x + player_width and ball_y >= player1_y and ball_y <= player1_y + player_height:
-        ball_hspeed *= -1
-        ball_x += 1
-    if ball_x + ball_radius >= player2_x and ball_x <= player2_x + player_width and ball_y >= player2_y and ball_y <= player2_y + player_height:
-        ball_hspeed *= -1
-        ball_x -= 1
+
+    if ball_x + ball_radius >= screen_width:
+        ball_hspeed = rd.choice([-ball_speed, ball_speed])
+        player1_score += 1
+        ball_x = 400
+        ball_y = 325
+
     if ball_y <= 0 or ball_y + ball_radius >= screen_height:
         ball_vspeed *= -1
 
@@ -122,7 +141,16 @@ while running:
     # Draw the Ball
     ball = pygame.draw.circle(screen, color_ball, (ball_x, ball_y), ball_radius)
 
-    
+    # Collisions
+    if ball.colliderect(player_1):
+        ball_hspeed *= -1.01
+        ball_x += 1
+    if ball.colliderect(player_2):
+        ball_hspeed *= -1.01
+        ball_x -= 1
+
+    # Show Score
+    show_score(p1score_x, p2score_x, score_y)
 
     # Refresh the window
     pygame.display.flip()
