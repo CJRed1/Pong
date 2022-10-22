@@ -49,17 +49,28 @@ pygame.display.set_caption("Pong Game")
 icon = pygame.image.load("pong_icon.png")
 pygame.display.set_icon(icon)
 
+# Sounds
+paddle = pygame.mixer.Sound("sounds/paddle.mp3")
+wall = pygame.mixer.Sound("sounds/wall.mp3")
+score = pygame.mixer.Sound("sounds/score.mp3")
+
 # Score Variables
 player1_score = 0
 player2_score = 0
 
 # Score Font
 score_font = pygame.font.Font("PixelEmulator-xq08.ttf", 32)
+winner_font = pygame.font.Font("PixelEmulator-xq08.ttf", 64)
 
 # Score Position
 p1score_x = 10
 p2score_x = 410
 score_y = 10
+
+# Winner Position
+winner_x = 200
+winner_y = 200
+game_won = 0
 
 # Show Score
 def show_score(x, x2, y):
@@ -67,6 +78,15 @@ def show_score(x, x2, y):
     score2 = score_font.render("P2: " + str(player2_score), True, color_line)
     screen.blit(score1, (x, y))
     screen.blit(score2, (x2, y))
+
+# Show Winner
+def show_winner(x, y, winner):
+    if winner == 1:
+        winner1 = winner_font.render("P1 Wins!!", True, (255, 50, 50))
+        screen.blit(winner1, (x, y))
+    elif winner == 2:
+        winner2 = winner_font.render("P2 Wins!!", True, (50, 50, 255))
+        screen.blit(winner2, (x, y))
 
 # Game Loop
 running = True
@@ -111,18 +131,21 @@ while running:
     ball_y += ball_vspeed
 
     if ball_x <= 0:
+        pygame.mixer.Sound.play(score)
         ball_hspeed = rd.choice([-ball_speed, ball_speed])
         player2_score += 1
         ball_x = 400
         ball_y = 325
 
     if ball_x + ball_radius >= screen_width:
+        pygame.mixer.Sound.play(score)
         ball_hspeed = rd.choice([-ball_speed, ball_speed])
         player1_score += 1
         ball_x = 400
         ball_y = 325
 
     if ball_y <= 0 or ball_y + ball_radius >= screen_height:
+        pygame.mixer.Sound.play(wall)
         ball_vspeed *= -1
 
     # Fill the screen with color
@@ -143,14 +166,36 @@ while running:
 
     # Collisions
     if ball.colliderect(player_1):
+        pygame.mixer.Sound.play(paddle)
         ball_hspeed *= -1.01
         ball_x += 1
     if ball.colliderect(player_2):
+        pygame.mixer.Sound.play(paddle)
         ball_hspeed *= -1.01
         ball_x -= 1
 
     # Show Score
     show_score(p1score_x, p2score_x, score_y)
 
+    # Show Winner
+
+    if player1_score >= 10:
+        game_won = 1
+        player1_score = 0
+        player2_score = 0
+    elif player2_score >= 10:
+        game_won = 2
+        player1_score = 0
+        player2_score = 0
+    
+    if game_won == 1:
+        show_winner(winner_x, winner_y, 1)
+    elif game_won == 2:
+        show_winner(winner_x, winner_y, 2)
+
     # Refresh the window
     pygame.display.flip()
+
+    if game_won != 0:
+        pygame.time.delay(3000)
+        game_won = 0
