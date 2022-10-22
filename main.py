@@ -53,6 +53,9 @@ pygame.display.set_icon(icon)
 paddle = pygame.mixer.Sound("sounds/paddle.mp3")
 wall = pygame.mixer.Sound("sounds/wall.mp3")
 score = pygame.mixer.Sound("sounds/score.mp3")
+pygame.mixer.Sound.set_volume(paddle, 0.1)
+pygame.mixer.Sound.set_volume(wall, 0.1)
+pygame.mixer.Sound.set_volume(score, 0.1)
 
 # Score Variables
 player1_score = 0
