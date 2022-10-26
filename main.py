@@ -53,9 +53,15 @@ pygame.display.set_icon(icon)
 paddle = pygame.mixer.Sound("sounds/paddle.mp3")
 wall = pygame.mixer.Sound("sounds/wall.mp3")
 score = pygame.mixer.Sound("sounds/score.mp3")
-pygame.mixer.Sound.set_volume(paddle, 0.1)
-pygame.mixer.Sound.set_volume(wall, 0.1)
-pygame.mixer.Sound.set_volume(score, 0.1)
+jingle = pygame.mixer.Sound("sounds/jingle.mp3")
+pygame.mixer.Sound.set_volume(paddle, 0.2)
+pygame.mixer.Sound.set_volume(wall, 0.2)
+pygame.mixer.Sound.set_volume(score, 0.2)
+pygame.mixer.Sound.set_volume(jingle, 0.2)
+
+back_music = pygame.mixer.music.load("sounds/back_music.mp3")
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
 
 # Score Variables
 player1_score = 0
@@ -186,10 +192,14 @@ while running:
         game_won = 1
         player1_score = 0
         player2_score = 0
+        pygame.mixer.Sound.play(jingle)
+        pygame.mixer.music.pause()
     elif player2_score >= 10:
         game_won = 2
         player1_score = 0
         player2_score = 0
+        pygame.mixer.Sound.play(jingle)
+        pygame.mixer.music.pause()
     
     if game_won == 1:
         show_winner(winner_x, winner_y, 1)
@@ -200,5 +210,6 @@ while running:
     pygame.display.flip()
 
     if game_won != 0:
-        pygame.time.delay(3000)
+        pygame.time.delay(7000)
+        pygame.mixer.music.unpause()
         game_won = 0
