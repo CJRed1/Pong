@@ -10,6 +10,4 @@ The game can be played with two human players.
 
 Below are images of the game already built.
 
-<image src=" " alt="pong">
-
-<image src=" " alt="pong">
+<image src="Captura de pantalla 2022-12-12 173628.png" alt="pong">
